@@ -4,6 +4,30 @@ format: html
 editor: visual
 ---
 
+-   Hazal Haytural
+-   NNF CBMR
+-   University of Copenhagen
+
+# Introduction
+
+this is **introduction**.
+
+# Methods and Results
+
+here we show **method and results**.
+
+## Analysis
+
+here ***analysis*** is shown. *a simple code can be found below.*
+
+```{r}
+2+5 
+```
+
+# Discussion
+
+here is **discussion**.
+
 ```{r setup}
 #| message: FALSE
 #| warning: FALSE
@@ -39,8 +63,7 @@ nhanes_small %>%
   knitr::kable(caption = "mean values of age and bmi")
 ```
 
-
-# Exercise 8.6 - Prettier table 
+# Exercise 8.6 - Prettier table
 
 ```{r}
 #| echo: FALSE
