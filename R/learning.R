@@ -120,7 +120,7 @@ NHANES_small %>% mutate(old = if_else(age >= 30, "Yes", "No")) %>%
 NHANES_small %>% select(bmi, diabetes) %>%
     filter(bmi >= 20 & bmi <= 40) #7408 rows
 
-#1 correct answer: to select cases with bmi >= 20 and bmi <=40 who have diabaetes
+#1 correct answer: to select cases with bmi >= 20 and bmi <=40 who have diabetes
 NHANES_small %>% select(bmi, diabetes) %>%
     filter(bmi >= 20 & bmi <= 40, diabetes == "Yes") #616 rows
 
@@ -132,3 +132,40 @@ NHANES_mofidied <- NHANES_small %>%
     select(young_child, mean_arterial_pressure)
 
 NHANES_mofidied
+
+
+# summary statistics ------------------------------------------------------
+
+NHANES_small %>% summarise(max_bmi = max(bmi)) #NA, since NA always propagates, you need to use na.rm
+
+NHANES_small %>%  summarise(max_bmi = max(bmi, na.rm = T)) #81.2
+
+NHANES_small %>% summarise(max_bmi = max(bmi, na.rm = T),
+                           min_bmi = min(bmi, na.rm = T))
+
+NHANES_small %>%  group_by(diabetes) %>% #first group by the factor levels given in diabetes column
+    summarise(mean_age = mean(age, na.rm = T),
+              mean_bmi = mean(bmi, na.rm = T))
+#here 3 groups within diabetes >> yes, no and NA
+
+NHANES_small %>% filter(!is.na(diabetes)) %>% #this will remove rows that have diabetes == NA
+    group_by(diabetes) %>%
+    summarise(mean_age = mean(age, na.rm = T),
+              mean_bmi = mean(bmi, na.rm = T)) #now, you don't see NA diabetes group.
+
+#now group by 2 different columns
+NHANES_small %>% filter(!is.na(diabetes)) %>%
+    group_by(diabetes, phys_active) %>%
+    summarise(mean_age = mean(age, na.rm = T),
+              mean_bmi = mean(bmi, na.rm = T))
+
+#if you need to remove NAs from 2 columns, you first filter for that either using , or &
+NHANES_small %>% filter(!is.na(diabetes) & !is.na(phys_active)) %>%
+    group_by(diabetes, phys_active) %>%
+    summarise(mean_age = mean(age, na.rm = T),
+              mean_bmi = mean(bmi, na.rm = T)) %>%
+    ungroup()
+
+
+# saving dataset as a file  -----------------------------------------------
+write_csv(NHANES_small, here::here("data/nhanes_small.csv"))
