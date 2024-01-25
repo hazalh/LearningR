@@ -184,3 +184,64 @@ nhanes_small %>%
   ggplot(aes(diabetes, bmi)) +
   geom_violin(na.rm = T)
 ```
+
+
+### 9.5 exercise to make plots with one or two variables 
+
+#### EX1 
+```{r}
+library(NHANES)
+nhanes_exercise <- NHANES %>%
+  rename_with(snakecase::to_snake_case) %>%
+  rename(sex = gender)
+
+nhanes_exercise
+```
+
+#### EX2
+to show the distribution of age (participant’s age at collection) and diabetes_age (age of diabetes diagnosis) in two separate, side-by-side plots, but inside one code chunk
+```{r}
+#| fig-cap: "Distribution of age and age at diabetes diagnosis"
+#| label: fig-distri-age-diabetesage
+#| fig-subcap:
+#| - "Distribution of age"
+#| - "Distribution of age at diabetes diagnosis"
+#| layout-ncol: 2
+
+
+nhanes_exercise %>%
+  ggplot(aes(age)) +
+  geom_density(na.rm = T)
+
+nhanes_exercise %>%
+  ggplot(aes(diabetes_age)) +
+  geom_density(na.rm = T)
+```
+
+#### EX3
+to find out how many people there who currently smoke (smoke_now) and who are at or above the age or 20. What can you say about how many smoke in this age group? 
+```{r}
+#| fig-cap: "Distribution of smoker across age"
+#| label: fig-dis-smokers-byage
+
+nhanes_exercise %>%
+  filter(!is.na(smoke_now), age >= 20) %>%
+  ggplot(aes(smoke_now)) +
+  geom_bar(na.rm = T)
+```
+
+#### EX4
+
+Mean arterial pressure is a blood pressure measure used to determine the average pressure arteries experience through a typical cardiac cycle.
+
+use geom_hex() and add another layer for geom_smooth() to find out how bmi (on the x-axis) relates to mean_arterial_pressure (on the y-axis). 
+```{r}
+#| fig-cap: "The relation between BMI and mean arterial pressure"
+#| label: fig-bmi-mean-arterial-pressure
+
+nhanes_exercise %>%
+  mutate(mean_arterial_pressure = (bp_sys_ave + (2 * bp_dia_ave)) / 3) %>%
+  ggplot(aes(bmi, mean_arterial_pressure)) +
+  geom_hex(na.rm = T) +
+  geom_smooth(na.rm = T)
+```
