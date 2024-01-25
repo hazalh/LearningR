@@ -1,12 +1,19 @@
 ---
 title: "Reproducible document"
 format: html
+theme: zephyr
 editor: visual
 ---
 
 -   Hazal Haytural
 -   NNF CBMR
--   University of Copenhagen
+-   University of Copenhagen\
+
+![image by ...](image/image.png){width="50%" height="50%"}
+
+![caption whatever](image/image.png){#fig-kitten width="50%" height="50%"}
+
+cute kitten in @fig-kitten
 
 # Introduction
 
