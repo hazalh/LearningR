@@ -28,7 +28,7 @@ here we show **method and results**.
 here ***analysis*** is shown. *a simple code can be found below.*
 
 ```{r}
-2+5 
+2 + 5
 ```
 
 # Discussion
@@ -95,4 +95,92 @@ nhanes_small %>%
     "Mean BMI" = mean_bmi
   ) %>%
   knitr::kable(caption = "Mean values of age and BMI for each education and diabetes status")
+```
+
+# Exercises
+### 9.3.1 - one continuous variable
+
+```{r}
+#| fig-cap: "Distribution of BMI"
+#| label: fig-bmi-histo
+#| message: FALSE
+
+
+nhanes_small %>%
+  ggplot(aes(bmi)) +
+  geom_histogram(na.rm = T)
+
+
+nhanes_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(bmi)) +
+  geom_histogram(na.rm = T)
+```
+
+### 9.3.2 - one discrete variable
+
+```{r}
+nhanes_small %>%
+  ggplot(aes(education)) +
+  geom_bar()
+
+
+nhanes_small %>%
+  ggplot(aes(diabetes)) +
+  geom_bar()
+```
+
+in these categorical variables, you cannot use na.rm = T, instead you need to filter it!
+
+```{r}
+#| fig-cap: "Distribution of Education status and Diabetes status"
+#| label: fig-diabetes-education
+#| fig-subcap:
+#| - "Number of those with different education"
+#| - "Number of those with or without diabetes"
+#| layout-ncol: 2
+
+
+
+nhanes_small %>%
+  filter(!is.na(education)) %>%
+  ggplot(aes(education)) +
+  geom_bar()
+
+nhanes_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(diabetes)) +
+  geom_bar()
+```
+
+### 9.4.1 - plotting two continuous variables 
+
+```{r}
+nhanes_small %>%
+  ggplot(aes(bmi, bp_sys_ave)) +
+  geom_hex(na.rm = T) +
+  geom_smooth(na.rm = T)
+```
+
+### 9.4.2 - plotting two discrete variables 
+
+```{r}
+nhanes_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(diabetes, fill = education)) +
+  geom_bar()
+
+nhanes_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(diabetes, fill = education)) +
+  geom_bar(position = position_dodge())
+```
+
+### 9.4.3. discrete and continous variables
+
+```{r}
+nhanes_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(diabetes, bmi)) +
+  geom_violin(na.rm = T)
 ```
